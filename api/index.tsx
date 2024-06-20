@@ -10,6 +10,7 @@ import { CARD_ABI, WAR_ABI } from "../utils/abi.js"
 import { getCastById } from "../utils/neynar.js"
 import satori from "satori"
 import fs from "fs"
+import path from "path"
 import sharp from "sharp"
 
 dotenv.config()
@@ -82,7 +83,8 @@ app.hono.get("/image/:castId", async (c) => {
     ],
   })
 
-  const font = fs.readFileSync("./public/Roboto-Regular.ttf")
+  let fontPath = path.join(process.cwd(), "public/Roboto-Regular.ttf")
+  const font = fs.readFileSync(fontPath)
 
   const svg = await satori(
     <div
