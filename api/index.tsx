@@ -29,10 +29,11 @@ export const app = new Frog({
 
 app.frame("/", (c) => {
   return c.res({
+    title: "Card Scouter",
     image: "/title.png",
     intents: [
       <Button.AddCastAction action="/card-scouter">
-        Wear Card Scouter
+        Add Card Scouter
       </Button.AddCastAction>,
     ],
   })
@@ -162,7 +163,7 @@ app.castAction(
     })
   },
   {
-    name: "/card Scounter",
+    name: "/card Scouter",
     icon: "eye",
     description: "Unveil Opponent Hands! A Strong Weapon in Every Card Game!",
   }
