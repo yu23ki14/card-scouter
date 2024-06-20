@@ -8,6 +8,9 @@ import { createPublicClient, http } from "viem"
 import { degen } from "viem/chains"
 import { CARD_ABI, WAR_ABI } from "../utils/abi.js"
 import { getCastById } from "../utils/neynar.js"
+import satori from "satori"
+import fs from "fs"
+import sharp from "sharp"
 
 dotenv.config()
 
@@ -35,6 +38,12 @@ app.frame("/", (c) => {
 })
 
 app.frame("/result/:castId", async (c) => {
+  return c.res({
+    image: `${process.env.SITE_URL}/api/image/${c.req.param("castId")}`,
+  })
+})
+
+app.hono.get("/image/:castId", async (c) => {
   const { castId } = c.req.param()
 
   const { cast } = await getCastById(castId)
@@ -44,7 +53,7 @@ app.frame("/result/:castId", async (c) => {
   }).url
 
   if (!url) {
-    return c.error({ message: "Scounter didn't work..." })
+    return c.res.json()
   }
 
   const gameId = url.split("/").pop()
@@ -73,49 +82,71 @@ app.frame("/result/:castId", async (c) => {
     ],
   })
 
-  return c.res({
-    image: (
+  const font = fs.readFileSync("./public/Roboto-Regular.ttf")
+
+  const svg = await satori(
+    <div
+      style={{
+        alignItems: "center",
+        background: `url(${process.env.SITE_URL}/background.png)`,
+        backgroundSize: "100% 100%",
+        display: "flex",
+        width: "995px",
+        height: "500px",
+        justifyContent: "space-between",
+        textAlign: "center",
+      }}
+    >
       <div
         style={{
-          alignItems: "center",
-          background: "black",
-          backgroundSize: "100% 100%",
           display: "flex",
-          height: "100%",
-          justifyContent: "space-between",
-          textAlign: "center",
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          columnGap: "15px",
+          rowGap: "12.5px",
+          width: "900px",
+          margin: "auto",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            columnGap: "30px",
-            rowGap: "25px",
-            width: "1000px",
-            margin: "auto",
-          }}
-        >
-          {balances.map((balance, index) => (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <img width="110px" src={`${process.env.SITE_URL}/1.png`} alt="" />
-              <p
-                style={{
-                  fontSize: "48px",
-                  color: "white",
-                  marginLeft: "7px",
-                }}
-              >
-                ×{balance.toString()}
-              </p>
-            </div>
-          ))}
-        </div>
+        {balances.map((balance, index) => (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              width="100px"
+              src={`${process.env.SITE_URL}/${index + 1}.png`}
+              alt=""
+            />
+            <p
+              style={{
+                fontSize: "30px",
+                color: "white",
+                marginLeft: "7px",
+              }}
+            >
+              ×{balance.toString()}
+            </p>
+          </div>
+        ))}
       </div>
-    ),
-  })
+    </div>,
+    {
+      width: 995,
+      height: 500,
+      fonts: [
+        {
+          name: "Roboto",
+          // Use `fs` (Node.js only) or `fetch` to read the font as Buffer/ArrayBuffer and provide `data` here.
+          data: font,
+          weight: 400,
+          style: "normal",
+        },
+      ],
+    }
+  )
+
+  const png = await sharp(Buffer.from(svg)).png().toBuffer()
+
+  return c.newResponse(png, 200, { contentType: "image/png" })
 })
 
 app.castAction(
