@@ -164,7 +164,7 @@ app.castAction(
   {
     name: "/card Scounter",
     icon: "eye",
-    description: "See your opponent hands!",
+    description: "Unveil Opponent Hands! A Strong Weapon in Every Card Game!",
   }
 )
 
