@@ -114,12 +114,10 @@ app.frame("/result/:castId", async (c) => {
               <p
                 style={{
                   fontSize: "48px",
-                  fontWeight: "bold",
                   color: "white",
                   marginLeft: "7px",
                 }}
               >
-                {" "}
                 ×{balance.toString()}
               </p>
             </div>
