@@ -100,11 +100,7 @@ app.frame("/result/:castId", async (c) => {
         >
           {balances.map((balance, index) => (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <img
-                width="110px"
-                src={`${process.env.SITE_URL}/${index + 1}.png`}
-                alt=""
-              />
+              <img width="110px" src={`${process.env.SITE_URL}/1.png`} alt="" />
               <p
                 style={{
                   fontSize: "48px",
