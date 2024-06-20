@@ -78,7 +78,7 @@ app.frame("/result/:castId", async (c) => {
       <div
         style={{
           alignItems: "center",
-          background: `url(${process.env.SITE_URL}/background.png)`,
+          background: "black",
           backgroundSize: "100% 100%",
           display: "flex",
           height: "100%",
