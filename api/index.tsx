@@ -81,14 +81,9 @@ app.frame("/result/:castId", async (c) => {
           background: `url(${process.env.SITE_URL}/background.png)`,
           backgroundSize: "100% 100%",
           display: "flex",
-          flexDirection: "row",
-          flexWrap: "nowrap",
           height: "100%",
           justifyContent: "space-between",
           textAlign: "center",
-          width: "100%",
-          fontFamily: "Bigelow Rules",
-          position: "relative",
         }}
       >
         <div
@@ -97,7 +92,6 @@ app.frame("/result/:castId", async (c) => {
             alignItems: "center",
             flexWrap: "wrap",
             justifyContent: "center",
-            textAlign: "center",
             columnGap: "30px",
             rowGap: "25px",
             width: "1000px",
