@@ -52,7 +52,7 @@ app.hono.get("/image/:castId", async (c) => {
 
   const url = cast.embeds.find((e: any) => {
     return e.url.includes("https://thecard.fun/war/challenge")
-  }).url
+  })?.url
 
   const publicClient = createPublicClient({
     chain: degen,
