@@ -54,25 +54,27 @@ app.hono.get("/image/:castId", async (c) => {
     return e.url.includes("https://thecard.fun/war/challenge")
   }).url
 
-  if (!url) {
-    return c.res.json()
-  }
-
-  const gameId = url.split("/").pop()
-
   const publicClient = createPublicClient({
     chain: degen,
     transport: http(),
   })
 
-  const game = await publicClient.readContract({
-    abi: WAR_ABI,
-    address: process.env.WAR_ADDRESS as `0x${string}`,
-    functionName: "games",
-    args: [gameId],
-  })
+  let address = ""
 
-  const address = game[0]
+  if (!url) {
+    address = cast.author.verified_addresses.eth_addresses[0]
+  } else {
+    const gameId = url.split("/").pop()
+
+    const game = await publicClient.readContract({
+      abi: WAR_ABI,
+      address: process.env.WAR_ADDRESS as `0x${string}`,
+      functionName: "games",
+      args: [gameId],
+    })
+
+    address = game[0]
+  }
 
   const balances = await publicClient.readContract({
     abi: CARD_ABI,
