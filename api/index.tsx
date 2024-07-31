@@ -162,7 +162,7 @@ app.hono.get("/image/:castId", async (c) => {
 
   const png = await sharp(Buffer.from(svg)).png().toBuffer()
 
-  return c.newResponse(png, 200, { contentType: "image/png" })
+  return c.newResponse(png, 200, { "content-type": "image/png" })
 })
 
 app.castAction(
