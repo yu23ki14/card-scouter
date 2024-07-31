@@ -52,8 +52,8 @@ app.hono.get("/image/:castId", async (c) => {
 
   const url = cast.embeds.find((e: any) => {
     return (
-      e.url.includes("https://thecard.fun/war/challenge") ||
-      e.url.includes("https://test-7eli.thecard.fun/war-tournament")
+      e.url?.includes("https://thecard.fun/war/challenge") ||
+      e.url?.includes("https://test-7eli.thecard.fun/war-tournament")
     )
   })?.url
 
