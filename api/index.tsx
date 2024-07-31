@@ -51,13 +51,8 @@ app.hono.get("/image/:castId", async (c) => {
   const { cast } = await getCastById(castId)
 
   const url = cast.embeds.find((e: any) => {
-    return (
-      e.url?.includes("https://thecard.fun/war/challenge") ||
-      e.url?.includes("https://test-7eli.thecard.fun/war-tournament")
-    )
+    return e.url.includes("https://thecard.fun/war/challenge")
   })?.url
-
-  const isTournament = url?.includes("war-tournament")
 
   const publicClient = createPublicClient({
     chain: degen,
@@ -73,9 +68,7 @@ app.hono.get("/image/:castId", async (c) => {
 
     const game = await publicClient.readContract({
       abi: WAR_ABI,
-      address: isTournament
-        ? (process.env.WAR_TOURNAMENT_ADDRESS as `0x${string}`)
-        : (process.env.WAR_ADDRESS as `0x${string}`),
+      address: process.env.WAR_ADDRESS as `0x${string}`,
       functionName: "games",
       args: [gameId],
     })
@@ -85,9 +78,7 @@ app.hono.get("/image/:castId", async (c) => {
 
   const balances = await publicClient.readContract({
     abi: CARD_ABI,
-    address: isTournament
-      ? (process.env.CARD_TOURNAMENT_ADDRESS as `0x${string}`)
-      : (process.env.CONTRACT_ADDRESS as `0x${string}`),
+    address: process.env.CONTRACT_ADDRESS as `0x${string}`,
     functionName: "balanceOfBatch",
     args: [
       new Array(14).fill(address),
@@ -102,9 +93,7 @@ app.hono.get("/image/:castId", async (c) => {
     <div
       style={{
         alignItems: "center",
-        background: `url(${process.env.SITE_URL}/${
-          isTournament ? "background_tournament" : "background"
-        }.png)`,
+        background: `url(${process.env.SITE_URL}/background.png)`,
         backgroundSize: "100% 100%",
         display: "flex",
         width: "995px",
